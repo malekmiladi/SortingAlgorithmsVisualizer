@@ -3,6 +3,7 @@
 Implemented using Unity and C#.
 
 Currently, the following algorithms are implemented:
+
 - Bubble Sort
 - Insertion Sort
 - Merge Sort
@@ -11,15 +12,28 @@ Currently, the following algorithms are implemented:
 
 Due to my limited understanding of how Coroutines work in Unity, I had to implement the sorting algorithms in one function.
 
-<video src='https://github.com/user-attachments/assets/0917ceae-0ea4-47e6-9698-5a5771de7f5a' width=180/>
+## Demo
 
-<video src='https://github.com/user-attachments/assets/d424bf4f-2461-4434-9624-45c71c5b4833' width=180/>
+### Bubble Sort
 
-<video src='https://github.com/user-attachments/assets/0550a7f2-c516-4a98-94ba-b5073ecb39fd' width=180/>
+<video src='https://github.com/user-attachments/assets/0917ceae-0ea4-47e6-9698-5a5771de7f5a' width=180/>,
 
-<video src='https://github.com/user-attachments/assets/cbc34f7b-283d-4b2f-92b0-f98d3d15547d' width=180/>
 
-<video src='https://github.com/user-attachments/assets/d0afcc81-b085-4cce-a251-16728c1351df' width=180/>
+### Insertion Sort
+
+<video src='https://github.com/user-attachments/assets/d424bf4f-2461-4434-9624-45c71c5b4833' width=180/>,
+
+### Merge Sort
+
+<video src='https://github.com/user-attachments/assets/0550a7f2-c516-4a98-94ba-b5073ecb39fd' width=180/>,
+
+### Quick Sort
+
+<video src='https://github.com/user-attachments/assets/cbc34f7b-283d-4b2f-92b0-f98d3d15547d' width=180/>,
+
+### Selection Sort
+
+<video src='https://github.com/user-attachments/assets/d0afcc81-b085-4cce-a251-16728c1351df' width=180/>,
 
 ## How to run
 
