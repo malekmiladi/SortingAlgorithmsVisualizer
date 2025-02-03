@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class VisualizerUtils : MonoBehaviour
+public class VisualizerUtils
 {
     public static void ChangeColor(Transform rect, Color color) {
         rect.GetComponent<SpriteRenderer>().material.color = color;

@@ -1,79 +1,91 @@
+using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = Unity.Mathematics.Random;
 
-public class VisualizerCore : MonoBehaviour
+namespace Code.Scripts
 {
-    private GameVariables gv = new(animationSpeed: 1F);
-    [SerializeField]
-    private Transform barPrefab;
-    [SerializeField]
-    private TMP_Dropdown algorithmSelector;
-    [SerializeField]
-    private Slider animationSpeedSlider;
-    private IEnumerator _coroutine;
+    public class VisualizerCore : MonoBehaviour
+    {
+        private GameVariables _gv;
+        [SerializeField]
+        private Transform barPrefab;
+        [SerializeField]
+        private TMP_Dropdown algorithmSelector;
+        [SerializeField]
+        private Slider animationSpeedSlider;
+        private IEnumerator _coroutine;
+        private ISortingStrategy _sortingStrategy;
 
-    public void GenerateArray() {
-        for (int i = 0; i < gv.Rects.Length; i++) {
-            if (gv.Rects[i] != null) {
-                Destroy(gv.Rects[i].gameObject);
+        private void GenerateArray() {
+            Random randomNum = new(13579);
+            for (var i = 0; i < _gv.Rects.Length; i++) {
+                var n = randomNum.NextInt(10, 500);
+                var rect = Instantiate(barPrefab);
+                rect.position = new Vector2(-6 + i * _gv.BarWidth, -5 + .05F);
+                rect.localScale = new Vector2(_gv.BarWidth - .05F, (n * _gv.BarHeight) - .05F);
+                _gv.Rects[i] = rect;
             }
         }
-        Random randomNum = new(13579);
-        for (int i = 0; i < gv.Rects.Length; i++) {
-            int n = randomNum.NextInt(10, 500);
-            Transform rect = Instantiate(barPrefab);
-            rect.position = new Vector2(-6 + i * gv.BarWidth, -5 + .05F);
-            rect.localScale = new Vector2(gv.BarWidth - .05F, (n * gv.BarHeight) - .05F);
-            gv.Rects[i] = rect;
-        }
-    }
 
-    public void GetAlgorithmDropdownValue() {
-        switch (algorithmSelector.value)
+        private void Awake()
         {
-            case 0:
-                _coroutine = BubbleSort.Sort(gv);
-                break;
-            case 1:
-                _coroutine = InsertionSort.Sort(gv);
-                break;
-            case 2:
-                _coroutine = MergeSort.Sort(gv);
-                break;
-            case 3:
-                _coroutine = QuickSort.Sort(gv);
-                break;
-            case 4:
-                _coroutine = SelectionSort.Sort(gv);
-                break;
-            default:
-                break;
+            _gv = new GameVariables(animationSpeed: 1F);
+            RandomizeArray();
         }
-    }
 
-    public void RandomizeArray() {
-        GenerateArray();
-    }
-
-    public void GetAnimationSpeed(float animationSpeed) {
-        gv.AnimationSpeed = animationSpeed;
-    }
-
-    public void SortArray() {
-        if (!gv.IsRunning) {
-            gv.IsRunning = true;
-            GetAlgorithmDropdownValue();
-            StartCoroutine(_coroutine);
-        } else {
-            StopCoroutine(_coroutine);
-            gv.IsRunning = false;
+        private void DestroyArray()
+        {
+            foreach (var t in _gv.Rects)
+            {
+                if (t != null) {
+                    Destroy(t.gameObject);
+                }
+            }
         }
-    }
 
-    public void QuitGame() {
-        Application.Quit();
+        public void GetSortingStrategy()
+        {
+            _sortingStrategy = algorithmSelector.value switch
+            {
+                0 => new BubbleSort(),
+                1 => new InsertionSort(),
+                2 => new MergeSort(),
+                3 => new QuickSort(),
+                4 => new SelectionSort(),
+                _ => _sortingStrategy
+            };
+        }
+
+        public void RandomizeArray() {
+            DestroyArray();
+            GenerateArray();
+        }
+
+        public void SetAnimationSpeed(float animationSpeed) {
+            _gv.AnimationSpeed = animationSpeed;
+        }
+
+        public void SortArray()
+        {
+            if (_gv.IsRunning)
+            {
+                StopCoroutine(_coroutine);
+                _gv.IsRunning = false;
+            }
+            else
+            {
+                _gv.IsRunning = true;
+                GetSortingStrategy();
+                _coroutine = _sortingStrategy.Sort(_gv);
+                StartCoroutine(_coroutine);
+            }
+        }
+
+        public void QuitGame() {
+            Application.Quit();
+        }
     }
 }

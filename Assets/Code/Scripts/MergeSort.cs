@@ -2,30 +2,30 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-public class MergeSort : MonoBehaviour
+public class MergeSort : ISortingStrategy
 {
     // Start is called before the first frame update
-    public static IEnumerator Sort(GameVariables gv) {
-        int l = gv.Rects.Length;
-        for (int k = 0; k < l; k++) {
+    public IEnumerator Sort(GameVariables gv) {
+        var l = gv.Rects.Length;
+        for (var k = 0; k < l; k++) {
             VisualizerUtils.ChangeColor(gv.Rects[k].GetChild(0), Color.gray);
         }
-        for (int size = 1; size < l; size *= 2) {
-            for (int start = 0; start < l - 1; start += size * 2) {
-                int mid = Math.Min(l - 1, start + size - 1);
-                int end = Math.Min(l - 1, start + 2 * size - 1);
+        for (var size = 1; size < l; size *= 2) {
+            for (var start = 0; start < l - 1; start += size * 2) {
+                var mid = Math.Min(l - 1, start + size - 1);
+                var end = Math.Min(l - 1, start + 2 * size - 1);
 
                 VisualizerUtils.ChangeColor(gv.Rects[start].GetChild(0), Color.green);
                 VisualizerUtils.ChangeColor(gv.Rects[mid].GetChild(0), Color.green);
                 VisualizerUtils.ChangeColor(gv.Rects[end].GetChild(0), Color.green);
 
-                Vector2[] temp = new Vector2[mid + 1 - start];
-                for (int k = start; k < mid + 1; k++) {
+                var temp = new Vector2[mid + 1 - start];
+                for (var k = start; k < mid + 1; k++) {
                     temp[k - start] = new Vector2(gv.Rects[k].localScale.x, gv.Rects[k].localScale.y);
                 }
-                int i = 0;
-                int j = mid + 1;
-                int p = start;
+                var i = 0;
+                var j = mid + 1;
+                var p = start;
                 while (i < temp.Length && j <= end) {
                     VisualizerUtils.ChangeColor(gv.Rects[j].GetChild(0), Color.red);
                     VisualizerUtils.ChangeColor(gv.Rects[p].GetChild(0), Color.red);
@@ -65,7 +65,7 @@ public class MergeSort : MonoBehaviour
                 VisualizerUtils.ChangeColor(gv.Rects[end].GetChild(0), Color.gray);
             }
         }
-        for (int k =  0; k < l; k++) {
+        for (var k =  0; k < l; k++) {
             VisualizerUtils.ChangeColor(gv.Rects[k].GetChild(0), Color.white);
         }
         gv.IsRunning = false;

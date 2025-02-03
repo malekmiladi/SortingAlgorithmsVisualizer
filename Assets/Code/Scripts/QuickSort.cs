@@ -1,10 +1,10 @@
 using System.Collections;
 using UnityEngine;
 
-public class QuickSort : MonoBehaviour
+public class QuickSort : ISortingStrategy
 {
-    public static IEnumerator Sort(GameVariables gv) {
-        int l = gv.Rects.Length;
+    public IEnumerator Sort(GameVariables gv) {
+        var l = gv.Rects.Length;
         if (l < 1) {
             yield return null;
         }
@@ -12,26 +12,26 @@ public class QuickSort : MonoBehaviour
         partitionStack.Push(l - 1);
         partitionStack.Push(0);
         while (partitionStack.Count > 0) {
-            int start = (int)partitionStack.Pop();
-            int end = (int)partitionStack.Pop();
-            for (int k = start; k < end + 1; k++) {
+            var start = (int)partitionStack.Pop();
+            var end = (int)partitionStack.Pop();
+            for (var k = start; k < end + 1; k++) {
                 VisualizerUtils.ChangeColor(gv.Rects[k].GetChild(0), Color.cyan);
             }
-            int pivot = end;
-            int i = start - 1;
+            var pivot = end;
+            var i = start - 1;
             VisualizerUtils.ChangeColor(gv.Rects[pivot].GetChild(0), Color.green);
             VisualizerUtils.ChangeColor(gv.Rects[start].GetChild(0), Color.green);
-            for (int j = start; j < end; j++) {
-                if (gv.Rects[j].localScale.y < gv.Rects[end].localScale.y) {
-                    i++;
-                    VisualizerUtils.ChangeColor(gv.Rects[j].GetChild(0), Color.red);
-                    VisualizerUtils.ChangeColor(gv.Rects[i].GetChild(0), Color.red);
-                    yield return new WaitForSeconds(.2F / gv.AnimationSpeed);
-                    Swap(gv.Rects, i, j);
-                    VisualizerUtils.ChangeColor(gv.Rects[start].GetChild(0), Color.green);
-                    VisualizerUtils.ChangeColor(gv.Rects[j].GetChild(0), Color.cyan);
-                    VisualizerUtils.ChangeColor(gv.Rects[i].GetChild(0), Color.cyan);
-                }
+            for (var j = start; j < end; j++)
+            {
+                if (!(gv.Rects[j].localScale.y < gv.Rects[end].localScale.y)) continue;
+                i++;
+                VisualizerUtils.ChangeColor(gv.Rects[j].GetChild(0), Color.red);
+                VisualizerUtils.ChangeColor(gv.Rects[i].GetChild(0), Color.red);
+                yield return new WaitForSeconds(.2F / gv.AnimationSpeed);
+                Swap(gv.Rects, i, j);
+                VisualizerUtils.ChangeColor(gv.Rects[start].GetChild(0), Color.green);
+                VisualizerUtils.ChangeColor(gv.Rects[j].GetChild(0), Color.cyan);
+                VisualizerUtils.ChangeColor(gv.Rects[i].GetChild(0), Color.cyan);
             }
 
             i++;
@@ -42,7 +42,7 @@ public class QuickSort : MonoBehaviour
             VisualizerUtils.ChangeColor(gv.Rects[i].GetChild(0), Color.gray);
             VisualizerUtils.ChangeColor(gv.Rects[end].GetChild(0), Color.gray);
             VisualizerUtils.ChangeColor(gv.Rects[pivot].GetChild(0), Color.gray);
-            for (int k =  start; k < end + 1; k++) {
+            for (var k =  start; k < end + 1; k++) {
                 VisualizerUtils.ChangeColor(gv.Rects[k].GetChild(0), Color.gray);
             }
             pivot = i;
@@ -56,7 +56,7 @@ public class QuickSort : MonoBehaviour
             }
             yield return new WaitForSeconds(.2F / gv.AnimationSpeed);
         }
-        for (int k =  0; k < l; k++) {
+        for (var k =  0; k < l; k++) {
             VisualizerUtils.ChangeColor(gv.Rects[k].GetChild(0), Color.white);
         }
         gv.IsRunning = false;
